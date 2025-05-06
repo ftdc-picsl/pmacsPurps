@@ -1,0 +1,2 @@
+singularity pull docker_hippogang_exvivo_segm_v1.4.0.sif docker://pulks/docker_hippogang_exvivo_segm:v1.4.0 
+singularity pull docker_nighres_v1.0.0.sif docker://pulks/docker_nighres:v1.0.0
