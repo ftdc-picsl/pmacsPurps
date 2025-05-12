@@ -30,7 +30,6 @@ for i in `cat $filelist `; do
     dirpart=$(dirname "$i")
     filepart=$(basename "$i")
     filestem=$(echo $filepart | sed 's/\.nii\.gz//' )
-    anatcheck=$(echo $dirpart | grep "/anat$" )
 
     # check for the reorient image and then copy it to pulkit's expected directory and file naming convention
     reorient=`ls ${bidsBase}/${i} 2> /dev/null`
@@ -69,8 +68,6 @@ for i in `cat $filelist `; do
         cmd="${bindir}/setupPurplemri.sh ${bindir} ${segvrsn} ${outdir} ${purplemodel} "
         echo $cmd 
         bsub -N -J ${filestem}_purple_${segvrsn} -gpu "num=1:mode=exclusive_process:mps=no:gtile=1" -o ${logdir}/${filestem}_purple_${segvrsn}_log_%J.txt -n 1 $cmd
-
-        # bwait -w "ended(${filestem}_purple_${segvrsn})"
     fi
 
 done
