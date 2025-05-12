@@ -250,9 +250,7 @@ $*
 
 echo "
 --- Script options ---
-brainQCnet image       : $image
 BIDS directory         : $bidsDir
-saved_models directory : $saved_models_dir
 Output directory       : $outputDir
 Cleanup temp           : $cleanupTmp
 User bind points       : $userBindPoints
