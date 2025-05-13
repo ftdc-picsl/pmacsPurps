@@ -1,8 +1,6 @@
 #!/bin/bash
 
-outBase=/project/ftdc_pipeline/exvivo_7T/hemis/
-bidsBase=/project/ftdc_volumetric/pmc_exvivo/bids/
-purplemodel="exvivo_t2w"
+bidsBase=/project/ftdc_pipeline/pmc_exvivo/oriented/bids/
 
 outBase=${outBase}/${purplemodel}/
 if [[ $# -lt 1 ]] ; then
@@ -16,6 +14,8 @@ fi
 scriptsdir=`pwd`
 
 segvrsn=v1.4.2
+outBase=/project/ftdc_pipeline/data/purple_${segvrsn}/
+purplemodel="exvivo_t2w"
 
 filelist=$1
 bindir=`pwd`
@@ -58,7 +58,7 @@ for i in `cat $filelist `; do
         echo "segmentation output already at ${purpsegname} ...skipping"
         continue
     else
-        re0000rient=$(echo $filestem | sed 's/$/_0000.nii.gz')
+        re0000rient=$(echo $filestem | sed 's/$/_0000.nii.gz/')
 
         echo "going to purple this ${reorient} ... "
         echo " copying to ${infoutdir}/${re0000rient} to get going"

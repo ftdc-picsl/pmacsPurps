@@ -153,7 +153,7 @@ shift $((OPTIND-1))
 
 whichPrep="docker_hippogang_exvivo_segm"
 
-image="${repoDir}/containers/${whichPrep}-${containerVersion}.sif"
+image="${repoDir}/containers/${whichPrep}_${containerVersion}.sif"
 
 if [[ ! -f $image ]]; then
   echo "Cannot find requested container $image"

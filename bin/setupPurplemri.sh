@@ -21,7 +21,7 @@ echo "Started at: ${start_time}"
 
 module load singularity/3.8.3
 
-${bindir}runPurplemri.sh \
+${bindir}/runPurplemri.sh \
    	-v ${version} \
 	-o ${workdir} \
 	-i ${workdir} \

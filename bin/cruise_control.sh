@@ -13,6 +13,10 @@ scriptDir=$(dirname "${scriptPath}")
 repoDir=${scriptDir%/bin}
 
 function usage() {
+  echo " This function is largely outdated, with much of its functionality now achieved using freesurfer."
+  echo " But, I left this here for posterity and in case it becomes useful for some other reason."
+  echo "" 
+  echo ""
   echo "Usage:
   $0 [-h] [-B src:dest,...,src:dest] [-c 1/0] [-e VAR=value]  \\
      -v version -i /path/to/bids -o /path/to/outputDir -- [prep args]
