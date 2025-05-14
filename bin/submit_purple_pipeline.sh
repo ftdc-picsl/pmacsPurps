@@ -1,8 +1,10 @@
 #!/bin/bash
 
 bidsBase=/project/ftdc_pipeline/pmc_exvivo/oriented/bids/
+segvrsn=v1.4.2
+outBase=/project/ftdc_pipeline/data/purple_${segvrsn}/${purplemodel}
+purplemodel="exvivo_t2w"
 
-outBase=${outBase}/${purplemodel}/
 if [[ $# -lt 1 ]] ; then
 	echo "./submit_purple_pipeline.sh <filelist.txt> "
     echo "  wrapper for purple mri for ex vivo hemispheres "
@@ -12,10 +14,6 @@ if [[ $# -lt 1 ]] ; then
 fi
 
 scriptsdir=`pwd`
-
-segvrsn=v1.4.2
-outBase=/project/ftdc_pipeline/data/purple_${segvrsn}/
-purplemodel="exvivo_t2w"
 
 filelist=$1
 bindir=`pwd`
