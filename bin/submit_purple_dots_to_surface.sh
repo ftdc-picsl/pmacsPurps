@@ -7,11 +7,11 @@ purplemodel="exvivo_t2w"
 purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250612/
 
 if [[ $# -lt 1 ]] ; then
-	echo "./submit_purple_parcellation.sh <filelist,hemi.csv> "
-    echo "  wrapper for running freesurfer parcellations on ex vivo hemisphere following purple mri and purple freesurfer"
+    echo "./submit_purple_dots_to_surface.sh <filelist,hemi.csv> "
+    echo "  wrapper for mapping the dots placed on t2-reslice to the freesurfer template following purple mri and freesurfer processing"
     echo "  filelist,hemi.csv should be path to a reoriented bids nifti file in /anat/ , relative to $bidsin, followed by L or R for which hemisphere was imaged"
     echo "  output goes to $outBase "
-	exit 1
+    exit 1
 fi
 
 scriptsdir=`pwd`
@@ -63,9 +63,9 @@ for x in `cat $filelist `; do
         continue
     else
 
-        cmd="${bindir}/run_purple_parcellation.sh ${i} ${hemi} ${purplerepo} ${bidsBase} ${outBase} ${freeoutdir} ${n_threads} "
+        cmd="${bindir}/reslice_dots_to_reorient_to_surface.sh ${i} ${hemi} ${purplerepo} ${bidsBase} ${outBase} ${freeoutdir} ${n_threads} "
         echo $cmd 
-        bsub -N -J ${filestem}_purpleparc -o ${logdir}/${filestem}_purpleparc_log_%J.txt -n 1 $cmd
+        bsub -N -J ${filestem}_reslice_dots_to_reorient_to_surface -o ${logdir}/${filestem}_reslice_dots_to_reorient_to_surface_log_%J.txt -n 1 -M 16GB $cmd
     fi
 
 done

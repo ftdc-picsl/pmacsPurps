@@ -1,8 +1,9 @@
 #!/bin/bash
-# get things ready for freesurfer and submit
+
 
 if [[ $# -lt 7 ]]; then
     echo "./ <filename> <hemi> <purple repo directory> <bids base directory> <segmentation t2 directory> <output base directory> <number threads>"
+    echo "This script is to add parcellations to already-run run_purple_freesurfer.sh output"
     echo " filename is the name sent into purple" 
     echo " hemi can be L (left) or R (right) "
     echo "      we dummy left hemispheres to right by reflecting across y-axis" 
@@ -74,11 +75,8 @@ else
 fi
 
 # setting up output directory structure
-# freedir=$(echo $dirpart | cut -d '/' -f1-2 | sed 's/\//xx/')
-freedir=$dirpart
 freedir=$(echo $dirpart | cut -d '/' -f1-2 | sed 's/\//_/')
 outDir=${outBase}/${freedir}/
-
 if [[ ! -d ${outDir} ]]; then 
     mkdir -p ${outDir}
 fi
@@ -94,12 +92,24 @@ fi
 if [[ $hemi == "L" ]]; then 
     rightreorient=${filestem}_right.nii.gz
     rightpurpleseg=${filestem}_right.nii.gz
-    c3d ${reorient} -flip y ${reorientdir}/${rightreorient}
-    c3d ${purpsegname} -flip y ${purplesegdir}/${rightpurpleseg}
+    if [[ ! -f ${rightreorient} ]] ; then 
+        c3d ${reorient} -flip y ${reorientdir}/${rightreorient}
+    fi
+    if [[ ! -f ${rightpurpleseg} ]]; then 
+        c3d ${purpsegname} -flip y ${purplesegdir}/${rightpurpleseg}
+    fi
 else 
     cp ${reorient} ${reorientdir}
     cp ${purpsegname} ${purplesegdir}
 fi
+
+filepath_to_parcellate=`ls ${reorientdir}/${filestem}*nii.gz | grep -v cortexdots 2> /dev/null`
+if [[ ! -f ${filepath_to_parcellate} ]]; then 
+    echo "need one file like this ${reorientdir}/${filestem}.nii.gz or this ${reorientdir}/${filestem}_right.nii.gz ...exiting"
+    exit 1
+else 
+    file_to_parcellate=$(basename "$filepath_to_parcellate")
+fi 
 
 # load modules
 # then set up rest of paths and dependencies 
@@ -123,9 +133,9 @@ fsatlases=${purplerepo}/freesurfer_atlases/
 
 # ugh
 cd ${purplerepo}/purple_mri/
-
 # goooo 
-cmd="bash run_surface_pipeline.sh ${freepath} ${outDir} ${reorientdir} ${purplesegdir} ${fsatlases} ${n_threads}"
-echo "beginning surface processing ...." 
+
+cmd="bash parcellation.sh ${outDir} ${file_to_parcellate} ${freepath} ${n_threads} ${fsatlases} "
+echo "beginning parcellations ...." 
 echo $cmd
 $cmd

@@ -7,11 +7,11 @@ purplemodel="exvivo_t2w"
 purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250513/
 
 if [[ $# -lt 1 ]] ; then
-	echo "./submit_purple_freesurfer.sh <filelist,hemi.csv> "
+    echo "./submit_purple_freesurfer.sh <filelist,hemi.csv> "
     echo "  wrapper for running freesurfer on ex vivo hemisphere following purple mri "
     echo "  filelist,hemi.csv should be path to a reoriented bids nifti file in /anat/ , relative to $bidsin, followed by L or R for which hemisphere was imaged"
     echo "  output goes to $outBase "
-	exit 1
+    exit 1
 fi
 
 scriptsdir=`pwd`
