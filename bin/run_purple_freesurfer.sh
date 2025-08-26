@@ -2,7 +2,7 @@
 # get things ready for freesurfer and submit
 
 if [[ $# -lt 7 ]]; then
-    echo "./ <filename> <hemi> <purple repo directory> <bids base directory> <segmentation t2 directory> <output base directory> <number threads>"
+    echo "./run_purple_freesurfer.sh <filename> <hemi> <purple repo directory> <bids base directory> <segmentation t2 directory> <output base directory> <number threads>"
     echo " filename is the name sent into purple" 
     echo " hemi can be L (left) or R (right) "
     echo "      we dummy left hemispheres to right by reflecting across y-axis" 
@@ -74,7 +74,6 @@ else
 fi
 
 # setting up output directory structure
-# freedir=$(echo $dirpart | cut -d '/' -f1-2 | sed 's/\//xx/')
 freedir=$dirpart
 freedir=$(echo $dirpart | cut -d '/' -f1-2 | sed 's/\//_/')
 outDir=${outBase}/${freedir}/
@@ -121,10 +120,8 @@ fi
 
 fsatlases=${purplerepo}/freesurfer_atlases/
 
-# ugh
 cd ${purplerepo}/purple_mri/
 
-# goooo 
 cmd="bash run_surface_pipeline.sh ${freepath} ${outDir} ${reorientdir} ${purplesegdir} ${fsatlases} ${n_threads}"
 echo "beginning surface processing ...." 
 echo $cmd

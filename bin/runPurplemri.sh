@@ -1,6 +1,4 @@
 #!/bin/bash
-module unload singularity
-module load singularity/3.8.3
 
 bkillJob=0
 cleanupTmp="1" # can be a path
@@ -24,7 +22,7 @@ function usage() {
 function help() {
     usage
   echo "This script handles various configuration options and bind points needed to run purple-mri 
-(https://github.com/Pulkit-Khandelwal/purple-mri/) on the cluster. Requires singularity (module load singularity/3.8.3).
+(https://github.com/Pulkit-Khandelwal/purple-mri/) on the cluster. Requires apptainer (module load apptainer/1.1.9).
 
 Use absolute paths, as these have to be mounted in the container. Participant BIDS preproc data
 should exist under /path/to/bids.

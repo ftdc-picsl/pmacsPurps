@@ -19,7 +19,7 @@ echo "LSB job ID: ${LSB_JOBID}"
 start_time=$(date +"%Y-%m-%d %H:%M:%S")
 echo "Started at: ${start_time}"
 
-module load singularity/3.8.3
+module load apptainer/1.1.9
 
 ${bindir}/runPurplemri.sh \
    	-v ${version} \
