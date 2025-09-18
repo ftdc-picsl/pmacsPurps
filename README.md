@@ -1,7 +1,7 @@
 # pmacsPurps
 Wrappers for submitting purple-mri jobs on the PMACS LPC
 
-We have containers of Pulkit's 7T segmentation software, purple-mri ([https://github.com/Pulkit-Khandelwal/purple-mri ]()), on the PMACS LPC. When accessing the code, it's best to make sure you know which version is being used. Versions are controlled using tags (not releases, for now)
+We have containers of Pulkit's 7T segmentation software, purple-mri ([https://github.com/Pulkit-Khandelwal/purple-mri ]()), on the PMACS LPC. Versions are controlled using tags (not releases, for now)
 Most recent tag is v0.1.1 and located on the cluster here:
 
 /project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.1.1
