@@ -2,8 +2,8 @@
 
 bidsBase=/project/ftdc_pipeline/pmc_exvivo/oriented/bids/
 segvrsn=v1.4.2
-outBase=/project/ftdc_pipeline/data/purple_${segvrsn}/${purplemodel}
 purplemodel="exvivo_t2w"
+outBase=/project/ftdc_pipeline/pmc_exvivo/oriented/purple_${segvrsn}/${purplemodel}/
 
 if [[ $# -lt 1 ]] ; then
 	echo "./submit_purple_pipeline.sh <filelist.txt> "
@@ -23,14 +23,15 @@ if [[ ! -d $logdir ]] ; then
     mkdir -p $logdir
 fi
     
-for i in `cat $filelist `; do 
+for i in `cat $filelist `; do
+    f=$(echo $i | cut -d ',' -f1)	
     # break apart input file name for usable parts
-    dirpart=$(dirname "$i")
-    filepart=$(basename "$i")
+    dirpart=$(dirname "$f")
+    filepart=$(basename "$f")
     filestem=$(echo $filepart | sed 's/\.nii\.gz//' )
 
     # check for the reorient image and then copy it to pulkit's expected directory and file naming convention
-    reorient=`ls ${bidsBase}/${i} 2> /dev/null`
+    reorient=`ls ${bidsBase}/${f} 2> /dev/null`
     if [[ ! -f $reorient ]] ; then
         echo "no file named ${reorient} ...exiting"
         # continue skips rest of loop for this line if no anat dir

@@ -2,9 +2,9 @@
 
 bidsBase=/project/ftdc_pipeline/pmc_exvivo/oriented/bids/
 segvrsn=v1.4.2
-outBase=/project/ftdc_pipeline/data/purple_${segvrsn}/${purplemodel}/
 purplemodel="exvivo_t2w"
-purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250612/
+outBase=/project/ftdc_pipeline/pmc_exvivo/oriented/purple_${segvrsn}/${purplemodel}/
+purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250918/
 
 if [[ $# -lt 1 ]] ; then
 	echo "./submit_purple_parcellation.sh <filelist,hemi.csv> "
