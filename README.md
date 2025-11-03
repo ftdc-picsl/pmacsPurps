@@ -2,9 +2,9 @@
 Wrappers for submitting purple-mri jobs on the PMACS LPC
 
 We have containers of Pulkit's 7T segmentation software, purple-mri ([https://github.com/Pulkit-Khandelwal/purple-mri ]()), on the PMACS LPC. Versions are controlled using tags (not releases, for now)
-Most recent tag is v0.1.1 and located on the cluster here:
+Most recent tag is v0.2.1 and located on the cluster here:
 
-/project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.1.1
+/project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.2.1
 
 Within that directory, organization follows most of the organization of repos in the ftdc-picsl GitHub group, with different containers either linked or built in containers/, submit scripts in bin/ .  
 
@@ -12,13 +12,13 @@ Briefly, purple-mri creates a hemisphere mask and does a 10-class segmentation. 
 
 We currently have a submit scripts set up to run a number of processes for ex vivo T2-weighted hemispheres. To start processing scans navigate to:
 
-cd /project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.1.1/bin/
+cd /project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.2.1/bin/
 
   1) run purple to mask and segment: submit_purple_pipeline.sh
             Input is a file where each line is a the path of a "T2-reorient" scan in BIDS format, relative to the bids/ directory. For default processing, it should be in 
 /project/ftdc_pipeline/pmc_exvivo/oriented/bids/
 
-  2) after that's run, you can get Freesurfer to run on the hemi: submit_purple_freesurfer.sh
+  2) after that's run, you can get Freesurfer to run on the hemi: submit_purple_freesurfer.sh >>> this STEP ISN'T CORRECT YET DUE TO FREESURFER BINARY ISSUES 
             Input is a csv file where each line is the path of a "T2-reorient" scan in BIDS format, relative to the bids/ directory, followed by which hemisphere it is. This script gets the hemisphere normalized to a template space, which allows us to perform vertex-level stats in a consistent space,  parcellate the cortex (see 3) below) and normalize dots to the template surface (see 4) below).
      
   3) This parcellation steps labels the gyri: submit_purple_parcellation.sh
