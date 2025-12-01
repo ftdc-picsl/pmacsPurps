@@ -8,7 +8,7 @@ outBase=/project/ftdc_pipeline/pmc_exvivo/oriented/purple_${segvrsn}/${purplemod
 if [[ $# -lt 1 ]] ; then
 	echo "./submit_purple_pipeline.sh <filelist.txt> "
     echo "  wrapper for purple mri for ex vivo hemispheres "
-    echo "  filelist.txt should be path to a reoriented bids nifti file in /anat/ , relative to $bidsin "
+    echo "  filelist.txt should be path to a reoriented bids nifti file in /anat/ , relative to $bidsBase "
     echo "  output goes to $outBase "
 	exit 1
 fi
