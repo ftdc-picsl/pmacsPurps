@@ -4,14 +4,19 @@ bidsBase=/project/ftdc_pipeline/pmc_exvivo/oriented/bids/
 segvrsn=v1.4.2
 purplemodel="exvivo_t2w"
 outBase=/project/ftdc_pipeline/pmc_exvivo/oriented/purple_${segvrsn}/${purplemodel}/
-purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250918/
-
+purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250919/
+queue="ftdc-normal"
 if [[ $# -lt 1 ]] ; then
-    echo "./submit_purple_freesurfer.sh <filelist,hemi.csv> "
+    echo "./submit_purple_freesurfer.sh <filelist,hemi.csv> <opt: queue> "
     echo "  wrapper for running freesurfer on ex vivo hemisphere following purple mri "
     echo "  filelist,hemi.csv should be path to a reoriented bids nifti file in /anat/ , relative to $bidsin, followed by L or R for which hemisphere was imaged"
     echo "  output goes to $outBase "
+    echo " 	default queue is $queue "
     exit 1
+fi
+
+if [[ $# == 2 ]] ; then
+	queue=$2
 fi
 
 scriptsdir=`pwd`
@@ -65,7 +70,7 @@ for x in `cat $filelist `; do
 
         cmd="${bindir}/run_purple_freesurfer.sh ${i} ${hemi} ${purplerepo} ${bidsBase} ${outBase} ${freeoutdir} ${n_threads} "
         echo $cmd 
-        bsub -N -J ${filestem}_purplefree -o ${logdir}/${filestem}_purplefree_log_%J.txt -n 1 $cmd
+        bsub -q $queue -N -J ${filestem}_purplefree -o ${logdir}/${filestem}_purplefree_log_%J.txt -n 1 -M 32GB $cmd
     fi
 
 done

@@ -14,7 +14,7 @@ if [[ $# -lt 7 ]]; then
     exit 1
 fi
 
-module load c3d/20191022
+# module load c3d/20191022
  
 filename=$1
 hemi=$2
@@ -25,9 +25,11 @@ outBase=$6
 n_threads=$7
 
 if [[ $hemi != "L" && $hemi != "R" ]]; then 
-    echo "ftdc error: hemi must be L (if left) or R (for right). It matters because everything gets flipped to right during this pipeline ... exiting"
+    echo "ftdc error: hemi must be L (if left) or R (for right). It matters because everything matters... exiting"
     exit 1
 fi
+
+
 
 # everythign's based on the reorient T2 image. so see if what we think is there is there
 reorient="${bidsBase}/${filename}"
@@ -79,50 +81,69 @@ freedir=$(echo $dirpart | cut -d '/' -f1-2 | sed 's/\//_/')
 outDir=${outBase}/${freedir}/
 
 if [[ ! -d ${outDir} ]]; then 
+    echo "making outDir $outDir"
     mkdir -p ${outDir}
 fi
 reorientdir=${outDir}/reorient
 if [[ ! -d ${reorientdir} ]]; then 
+    echo "making reorientdir $reorientdir"
     mkdir ${reorientdir}
 fi
 purplesegdir=${outDir}/purpleseg
 if [[ ! -d ${purplesegdir} ]]; then 
+    echo "making purplesegdir $purplesegdir"
     mkdir ${purplesegdir}
 fi
 
 if [[ $hemi == "L" ]]; then 
-    rightreorient=${filestem}_right.nii.gz
-    rightpurpleseg=${filestem}_right.nii.gz
-    c3d ${reorient} -flip y ${reorientdir}/${rightreorient}
-    c3d ${purpsegname} -flip y ${purplesegdir}/${rightpurpleseg}
+    cp ${reorient} ${reorientdir}
+    cp ${purpsegname} ${purplesegdir}
+    hemi=lh
 else 
     cp ${reorient} ${reorientdir}
     cp ${purpsegname} ${purplesegdir}
+    hemi=rh
 fi
 
 # load modules
 # then set up rest of paths and dependencies 
-module load python/3.9
+module unload python
+module unload python
+
+module load miniconda/3-25
+eval "$(conda shell.bash hook)"
+conda activate /project/ftdc_pipeline/pmc_exvivo/purple_python_env2 
+
+module unload c3d
+module load c3d/20250523 
 
 module load freesurfer/7.4.0
 source /appl/freesurfer-7.4.0/SetUpFreeSurfer.sh 
+
 freepath="/appl/freesurfer-7.4.0/"
 
-fstemplatedir=${purplerepo}/fsaverage/
-if [[ ! -L ${outDir} ]] ; then 
-    ln -s ${fstemplatedir} ${outDir}
+fstemplatedir=${freepath}/subjects/fsaverage
+
+if [[ ! -d ${outDir}/fsaverage/ ]] ; then 
+    echo "copying fstemplatedir ${fstemplatedir} to outDir ${outDir} "
+    cp -r ${fstemplatedir} ${outDir}
 fi
 
-autodet=${purplerepo}/purple_mri/autodet.gw.stats.binary.rh.dat
-if [[ ! -L ${outDir}/autodet.gw.stats.binary.rh.dat ]] ; then 
-    ln -s ${autodet} ${outDir}
+autodet=${purplerepo}/purple_mri/autodet.gw.stats.binary.dat
+if [[ -f $autodet ]] ; then
+    if [[ ! -L ${outDir}/autodet.gw.stats.binary.dat ]] ; then 
+        ln -s ${autodet} ${outDir}
+    fi
+else 
+    echo " no $autodet ...exiting"
+    exit 1
 fi
 
 fsatlases=${purplerepo}/freesurfer_atlases/
 
 cd ${purplerepo}/purple_mri/
 
-cmd="bash run_surface_pipeline.sh ${freepath} ${outDir} ${reorientdir} ${purplesegdir} ${fsatlases} ${n_threads}"
+cmd="bash run_surface_pipeline.sh ${freepath} ${outDir} ${reorientdir} ${purplesegdir} ${fsatlases} ${n_threads} ${hemi}"
 echo "beginning surface processing ...." 
 echo $cmd
 $cmd

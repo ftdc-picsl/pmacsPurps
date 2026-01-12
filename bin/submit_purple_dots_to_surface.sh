@@ -4,7 +4,7 @@ bidsBase=/project/ftdc_pipeline/pmc_exvivo/oriented/bids/
 segvrsn=v1.4.2
 purplemodel="exvivo_t2w"
 outBase=/project/ftdc_pipeline/pmc_exvivo/oriented/purple_${segvrsn}/${purplemodel}/
-purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250918/
+purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250919/
 
 if [[ $# -lt 1 ]] ; then
     echo "./submit_purple_dots_to_surface.sh <filelist,hemi.csv> "

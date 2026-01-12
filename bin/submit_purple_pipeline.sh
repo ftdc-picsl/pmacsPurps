@@ -63,7 +63,8 @@ for i in `cat $filelist `; do
         echo " copying to ${infoutdir}/${re0000rient} to get going"
 
         cp ${reorient} ${infoutdir}/${re0000rient}
-
+        chmod 774 ${infoutdir}/${re0000rient}
+        
         cmd="${bindir}/setupPurplemri.sh ${bindir} ${segvrsn} ${outdir} ${purplemodel} "
         echo $cmd 
         bsub -N -J ${filestem}_purple_${segvrsn} -gpu "num=1:mode=exclusive_process:mps=no:gtile=1" -o ${logdir}/${filestem}_purple_${segvrsn}_log_%J.txt -n 1 $cmd
