@@ -5,7 +5,7 @@ segvrsn=v1.4.2
 purplemodel="exvivo_t2w"
 outBase=/project/ftdc_pipeline/pmc_exvivo/oriented/purple_${segvrsn}/${purplemodel}/
 purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250919/
-queue="ftdc-normal"
+queue="ftdc_normal"
 if [[ $# -lt 1 ]] ; then
     echo "./submit_purple_freesurfer.sh <filelist,hemi.csv> <opt: queue> "
     echo "  wrapper for running freesurfer on ex vivo hemisphere following purple mri "
