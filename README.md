@@ -15,16 +15,19 @@ We currently have a submit scripts set up to run a number of processes for ex vi
 cd /project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.2.1/bin/
 
   1) run purple to mask and segment: submit_purple_pipeline.sh
-            Input is a file where each line is a the path of a "T2-reorient" scan in BIDS format, relative to the bids/ directory. For default processing, it should be in 
+            Input is a file where each line is a the path of a "T2w-reorient" scan in BIDS format, relative to the bids/ directory. For default processing, it should be in 
 /project/ftdc_pipeline/pmc_exvivo/oriented/bids/
 
-  2) after that's run, you can get Freesurfer to run on the hemi: submit_purple_freesurfer.sh >>> this STEP ISN'T CORRECT YET DUE TO FREESURFER BINARY ISSUES 
-            Input is a csv file where each line is the path of a "T2-reorient" scan in BIDS format, relative to the bids/ directory, followed by which hemisphere it is. This script gets the hemisphere normalized to a template space, which allows us to perform vertex-level stats in a consistent space,  parcellate the cortex (see 3) below) and normalize dots to the template surface (see 4) below).
+  2) after that's run, you can get Freesurfer to run on the hemi: submit_purple_freesurfer.sh  
+            Input is a csv file where each line is the path of a "T2w-reorient" scan in BIDS format, relative to the bids/ directory, followed by which hemisphere it is. This script uses the PURPLE segmentation to guide freesurfer along to do its thing with the hemisphere, including:
+	a) hemisphere normalized to a template space, which allows us to perform vertex-level stats in a consistent space if we feel like it
+	b) perform topology correction of the surfaces (resolve gyral walls touching and stuff)
+	c) parcellate the cortex (surface)
+	d) propagate the surface parcellations back to the volumetric space
      
-  3) This parcellation steps labels the gyri: submit_purple_parcellation.sh
-           Same list for 2). By default, does the DKT cortical labels. Can get it set up to do other probably.
      
-  4) You can also move the dots placed in the T2 reslice space to group template space: submit_purple_dots_to_surface.sh
+we need things that will default move things around after this, but freesurfer will take a while  
+4) You can also move the dots placed in the T2 reslice space to group template space: submit_purple_dots_to_surface.sh
            Input is the same list as for 2) and 3).
 "Dots" are placed on the t2 images that have been reoriented and resliced. This is done manually. It's important because the dots are useful for landmarking pathological features in a consistent way. However, it's troublesome for neuroimagers because we've been told forever to avoid manual steps at all costs. In any case, it's useful to get the dots resampled to other surfaces. For now, we have one that warps 
 
