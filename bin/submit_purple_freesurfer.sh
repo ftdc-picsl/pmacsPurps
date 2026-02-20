@@ -70,7 +70,10 @@ for x in `cat $filelist `; do
 
         cmd="${bindir}/run_purple_freesurfer.sh ${i} ${hemi} ${purplerepo} ${bidsBase} ${outBase} ${freeoutdir} ${n_threads} "
         echo $cmd 
-        bsub -q $queue -N -J ${filestem}_purplefree -o ${logdir}/${filestem}_purplefree_log_%J.txt -n 1 -M 32GB $cmd
+        ocmd="bsub -q $queue -N -J ${filestem}_purplefree -o ${logdir}/${filestem}_purplefree_log_%J.txt -n 4 -M 48GB $cmd "
+	echo $ocmd
+	$ocmd
+	sleep 10m
     fi
 
 done

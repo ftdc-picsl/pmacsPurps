@@ -17,7 +17,6 @@ module unload freesurfer
 module load freesurfer/7.4.0
 
 module unload python
-module load python/3.9
 
 module unload c3d
 module load c3d/20250523
