@@ -25,7 +25,7 @@ fi
 
 for subj in "${subjects[@]}" ; do
     echo ${subj}
-    SUBJECTS_DIR=${working_dir}/${subj}
+    SUBJECTS_DIR=${working_dir}/
     surfreg --s $subj --t fsaverage_sym $hemiflag --no-annot
     surfreg --s $subj --t fsaverage_sym $hemiflag --no-annot --xhemi
 done
