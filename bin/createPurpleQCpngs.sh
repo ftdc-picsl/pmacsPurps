@@ -86,5 +86,55 @@ fi
 png_cor="${outResliceRoot}_desc-qcCor.png"
 if [[ ! -f $png_cor ]] ; then 
     CreateTiledMosaic -i $reslice -x $reslice_mask -r $reslice_mask -a 0 -s 10 -g 1 -f 0x1 -o $png_cor -d y
+fi
 
+
+
+flash_filepart=$(basename $reorient | sed 's/_acq-300um_rec-reorient_T2w.nii.gz//')
+inflashRoot=${bidsBase}/${dirpart}/${flash_filepart}
+flash=`ls ${inflashRoot}*rec-reorient_FLASH.nii.gz | grep -v "part-phase" 2> /dev/null`
+if [[ -f $flash ]] ; then 
+    outflash_filepart=$(basename $flash)
+    outflashRoot=$(echo $outflash_filepart | sed 's/.nii.gz//')
+    outflashRoot=${qcBase}/${dirpart}/${outflashRoot}
+    flash_mask=${outflashRoot}_dumbMask.nii.gz
+    ThresholdImage 3 $flash $flash_mask 1 Inf 0 1
+    outflashRoot=${outflashRoot}_dumblyMasked
+
+    png_ax="${outflashRoot}_desc-qcAx.png"
+    if [[ ! -f $png_ax ]] ; then 
+        CreateTiledMosaic -i $flash -x $flash_mask -r $flash_mask -a 0 -s 17 -f 1x1 -o $png_ax -d z
+    fi
+
+    png_cor="${outflashRoot}_desc-qcCor.png"
+    if [[ ! -f $png_cor ]] ; then 
+        CreateTiledMosaic -i $flash -x $flash_mask -r $flash_mask -a 0 -s 17 -g 1 -f 0x1 -o $png_cor -d y
+    fi
+else 
+    echo "no flash found in ${bidsBase}/${dirpart}"
+fi
+
+
+ciss_filepart=$(basename $reorient | sed 's/_acq-300um_rec-reorient_T2w.nii.gz/_acq-ciss500um_rec-reorient_T2w.nii.gz/')
+ciss=`ls ${bidsBase}/${dirpart}/${ciss_filepart} 2> /dev/null`
+if [[ -f $ciss ]] ; then 
+    outciss_filepart=$(basename $ciss)
+    outcissRoot=$(echo $outciss_filepart | sed 's/.nii.gz//')
+    outcissRoot=${qcBase}/${dirpart}/${outcissRoot}
+
+    ciss_mask=${outcissRoot}_dumbMask.nii.gz
+    ThresholdImage 3 $ciss $ciss_mask 1 Inf 0 1
+    outcissRoot=${outcissRoot}_dumblyMasked
+
+    png_ax="${outcissRoot}_desc-qcAx.png"
+    if [[ ! -f $png_ax ]] ; then 
+        CreateTiledMosaic -i $ciss -x $ciss_mask -r $ciss_mask -a 0 -s 10 -f 1x1 -o $png_ax -d z
+    fi
+
+    png_cor="${outcissRoot}_desc-qcCor.png"
+    if [[ ! -f $png_cor ]] ; then 
+        CreateTiledMosaic -i $ciss -x $ciss_mask -r $ciss_mask -a 0 -s 10 -g 1 -f 0x1 -o $png_cor -d y
+    fi
+else 
+    echo "no ciss found in ${bidsBase}/${dirpart}"
 fi

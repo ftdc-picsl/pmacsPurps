@@ -3,7 +3,7 @@
 bidsBase=/project/ftdc_pipeline/pmc_exvivo/oriented/bids/
 purpleBase=/project/ftdc_pipeline/pmc_exvivo/oriented/purple_v1.4.2/exvivo_t2w/
 qcBase=/project/ftdc_pipeline/pmc_exvivo/oriented/qc/
-
+scriptsDir=/project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.2.1/bin/
 if [[ $# -lt 1 ]] ; then 
     echo "./submit_createPurpleQCpngs.sh <file_list> "
     echo " <file_list>  can be text file or csv with first column image file names relative to ${bidsBase}"
@@ -14,7 +14,6 @@ filelist=$1
 if [[ ! -d ${qcBase}/logs/ ]] ; then 
     mkdir -p ${qcBase}/logs/
 fi
-echo ${qcBase}/logs/ made 
 
 for i in `cat $filelist `; do
     f=$(echo $i | cut -d ',' -f1)
@@ -50,13 +49,11 @@ for i in `cat $filelist `; do
         echo "segmentation does not exist at ${purpsegname} ...skipping"
         continue
     else
-        re0000rient=$(echo $filestem | sed 's/$/_0000.nii.gz/')
-
         echo "underlay ${f} ... "
         echo "overlay ${purpsegname} ... "
 
-        cmd="createPurpleQCpngs.sh $f ${purpsegname} $bidsBase $qcBase"
+        cmd="${scriptsDir}/createPurpleQCpngs.sh $f ${purpsegname} $bidsBase $qcBase"
         echo $cmd 
-        bsub -n 1 -M 4GB -o ${qcBase}/logs//${filestem}_qc_pngs_%J.txt $cmd 
+        bsub -n 1 -M 8GB -o ${qcBase}/logs/${filestem}_qc_pngs_%J.txt $cmd 
     fi
 done
