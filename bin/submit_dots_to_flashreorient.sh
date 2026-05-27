@@ -38,11 +38,18 @@ for x in `cat $filelist `; do
     echo "${reorient} found"
     echo "" 
     
-    # check for the t2w-reslice image
-    reslice_i=$(echo $i | sed 's/reorient/reslice/')
+    # check for manually resliced t2w-reslice image
+    reslice_bidschunk="reslice"
+    reslice_i=$(echo $i | sed "s/reorient/$reslice_bidschunk/")
+    reslice=`ls ${bidsBase}/${reslice_i} 2> /dev/null`
+    # if no manually resliced, we check for automatic
+    if [[ ! -f $reslice ]] ; then
+        reslice_bidschunk="reslice_space-MNI"
+    fi 
+    reslice_i=$(echo $i | sed "s/reorient/$reslice_bidschunk/")
     reslice=`ls ${bidsBase}/${reslice_i} 2> /dev/null`
     if [[ ! -f $reslice ]] ; then
-        echo "no file named ${bidsBase}/${reslice_i} ...skipping"
+        echo "no T2w reslice in expected manual or auatomatic file naming in  ${bidsBase}/${dirpart} ...skipping"
         # continue skips rest of loop for this line if no anat dir
         continue
     fi 
@@ -61,7 +68,7 @@ for x in `cat $filelist `; do
     echo "" 
 
     # check for the t2w-reslice dots image
-    reslice_dots_i=$(echo $reslice_i | sed 's/acq-300um_rec-reslice_T2w/rec-reslice_space-T2w_cortexdots_final/')
+    reslice_dots_i=$(echo $reslice_i | sed "s/acq-300um_rec-${reslice_bidschunk}_T2w/rec-reslice_space-T2w_cortexdots_final/")
     reslice_dots=`ls ${bidsBase}/${reslice_dots_i} 2> /dev/null`
     if [[ ! -f $reslice_dots ]] ; then
         echo "no file named ${bidsBase}/${reslice_dots_i} ...skipping"
@@ -72,7 +79,7 @@ for x in `cat $filelist `; do
     echo "" 
 
     # check for the flash-reorient image
-    flash_i=$(echo $reslice_i | sed 's/acq-300um_rec-reslice_T2w/acq-160um_echo-2_run-3_rec-reorient_FLASH/')
+    flash_i=$(echo $reslice_i | sed "s/acq-300um_rec-${reslice_bidschunk}_T2w/acq-160um_echo-2_run-3_rec-reorient_FLASH/")
     flash=`ls ${bidsBase}/${flash_i} 2> /dev/null`
     if [[ ! -f $flash ]] ; then
         echo "no file named ${bidsBase}/${flash_i} ...skipping"
@@ -83,7 +90,7 @@ for x in `cat $filelist `; do
     echo "" 
 
     # check for the flash-reorient dots image
-    flash_dots_i=$(echo $reslice_i | sed 's/acq-300um_rec-reslice_T2w/rec-reorient_space-FLASH_cortexdots_final/')
+    flash_dots_i=$(echo $reslice_i | sed 's/acq-300um_rec-${reslice_bidschunk}_T2w/rec-reorient_space-FLASH_cortexdots_final/')
     flash_dots=`ls ${bidsBase}/${flash_dots_i} 2> /dev/null`
     if [[ -f $flash_dots ]] ; then
         echo "file ${flash_dots} exists ...skipping"
