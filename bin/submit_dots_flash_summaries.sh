@@ -3,6 +3,7 @@
 bidsBase=/project/ftdc_pipeline/pmc_exvivo/oriented/bids/
 purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250919/
 scriptsdir=/project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.2.1/bin/
+outdir=${bidsBase}/derivatives/beta_FLASH_T2w/
 
 if [[ $# -lt 1 ]] ; then
     echo "./submit_dots_flash_summaries.sh <filelist,<<optional:hemi>>.csv> "
@@ -15,7 +16,6 @@ fi
 filelist=$1
 n_threads=1
 
-outdir=${bidsBase}/derivatives/
 logdir=${outdir}logs/
 if [[ ! -d $logdir ]] ; then 
     mkdir -p $logdir
@@ -69,7 +69,7 @@ for x in `cat $filelist `; do
     flash_dots_i=$(echo $reslice_i | sed "s/acq-300um_rec-${reslice_bidschunk}_T2w/rec-reorient_space-FLASH_cortexdots_final/")
     flash_dots=`ls ${outdir}/${flash_dots_i} 2> /dev/null`
     if [[ ! -f $flash_dots ]] ; then
-        echo "no file ${outdir}/${flash_dots} exists ...skipping"
+        echo "no file ${outdir}/${flash_dots_i} exists ...skipping"
         # continue skips rest of loop for this line if no anat dir
         continue
     fi 
@@ -77,9 +77,9 @@ for x in `cat $filelist `; do
     echo "" 
 
 
-    cmd="${scriptsdir}/dots_flash_summary.sh  ${reslice_dots} ${flash} ${outdir}/${flash_dots_i} ${scriptsdir}"
+    cmd="${scriptsdir}/dots_flash_summary.sh ${flash} ${outdir}/${flash_dots_i} ${scriptsdir}"
     echo $cmd 
-    # $cmd
+    $cmd
     # bsub -N -J ${filestem}_reslice_dots_to_flashreorient -o ${logdir}/${filestem}_reslice_dots_to_flashreorient_%J.txt -n 4 -M 12GB $cmd
 
 done
