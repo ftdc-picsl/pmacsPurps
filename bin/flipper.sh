@@ -26,6 +26,6 @@ fi
 for subj in "${subjects[@]}" ; do
     echo ${subj}
     SUBJECTS_DIR=${working_dir}/
-    surfreg --s $subj --t fsaverage_sym $hemiflag --no-annot
-    surfreg --s $subj --t fsaverage_sym $hemiflag --no-annot --xhemi
+    /project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.2.1/bin/surfreg --s $subj --t fsaverage --no-annot $hemiflag 
+    /project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.2.1/bin/surfreg --s $subj --t fsaverage --no-annot --xhemi $hemiflag 
 done

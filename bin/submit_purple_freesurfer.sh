@@ -73,7 +73,7 @@ for x in `cat $filelist `; do
         ocmd="bsub -q $queue -N -J ${filestem}_purplefree -o ${logdir}/${filestem}_purplefree_log_%J.txt -n 4 -M 48GB $cmd "
 	echo $ocmd
 	$ocmd
-	sleep 10m
+	#sleep 10m
     fi
 
 done
