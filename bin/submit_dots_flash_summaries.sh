@@ -79,8 +79,8 @@ for x in `cat $filelist `; do
 
     cmd="${scriptsdir}/dots_flash_summary.sh ${flash} ${outdir}/${flash_dots_i} ${scriptsdir}"
     echo $cmd 
-    $cmd
-    # bsub -N -J ${filestem}_reslice_dots_to_flashreorient -o ${logdir}/${filestem}_reslice_dots_to_flashreorient_%J.txt -n 4 -M 12GB $cmd
+    # $cmd
+    bsub -N -J ${filestem}_reslice_dots_to_flashreorient -o ${logdir}/${filestem}_reslice_dots_to_flashreorient_%J.txt -n 1 -M 12GB $cmd
 
 done
 
