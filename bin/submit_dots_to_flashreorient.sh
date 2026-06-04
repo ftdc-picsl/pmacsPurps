@@ -79,15 +79,19 @@ for x in `cat $filelist `; do
     echo "" 
 
     # check for the flash-reorient image
-    flash_i=$(echo $reslice_i | sed "s/acq-300um_rec-${reslice_bidschunk}_T2w/acq-160um_echo-2_run-3_rec-reorient_FLASH/")
-    flash=`ls ${bidsBase}/${flash_i} 2> /dev/null`
-    if [[ ! -f $flash ]] ; then
-        echo "no file named ${bidsBase}/${flash_i} ...skipping"
-        # continue skips rest of loop for this line if no anat dir
-        continue
-    fi 
-    echo "${flash} found"
-    echo "" 
+    reroot=$(echo $i | sed 's/acq-300um_rec-reorient_T2w.nii.gz//')
+
+    for flash_pick in 'acq-160um_echo-2_run-3_rec-reorient_FLASH.nii.gz' 'acq-160um_echo-2_run-2_rec-reorient_FLASH.nii.gz' 'acq-160um_echo-2_rec-reorient_FLASH.nii.gz' \
+        'acq-channelCOMBx160um_dir-positive_run-02_echo-2_part-mag_rec-reorient_FLASH.nii.gz' 'acq-channelCOMBx160um_dir-positive_echo-2_part-mag_rec-reorient_FLASH.nii.gz' ; do 
+        # echo $flash_pick
+        # check for the flash-reorient image
+        flash_i=$(echo $i | sed "s/acq-300um_rec-reorient_T2w.nii.gz/${flash_pick}/")
+        flash=`ls ${bidsBase}/${flash_i} 2> /dev/null`
+        if [[ -f $flash ]] ; then
+            echo "${flash} found"
+            break
+        fi
+    done 
 
     # check for the flash-reorient dots image
     flash_dots_i=$(echo $reslice_i | sed "s/acq-300um_rec-${reslice_bidschunk}_T2w/rec-reorient_space-FLASH_cortexdots_final/")

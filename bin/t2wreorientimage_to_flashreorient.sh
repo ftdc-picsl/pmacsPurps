@@ -22,7 +22,7 @@ if [[ -f $t2wreorient_in_flashreorient_filename_check ]] ; then
 fi
 
 # check for the t2w-reorient flash-reorient warp
-flash_warp_i=$(echo $flash_reorient | sed 's/acq-160um_echo-2_run-3_rec-reorient_FLASH/from-T2w_to-FLASH_warp_smooth/')
+flash_warp_i=$(echo $t2w_reorient | sed 's/acq-300um_rec-reorient_T2w/from-T2w_to-FLASH_warp_smooth/')
 flash_warp=`ls ${flash_warp_i} 2> /dev/null`
 if [[ ! -f $flash_warp ]] ; then
     echo "no file named ${flash_warp_i} ... making it (slow part)"
