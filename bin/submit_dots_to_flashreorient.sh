@@ -3,8 +3,8 @@
 bidsBase=/project/ftdc_pipeline/pmc_exvivo/oriented/bids/
 purplerepo=/project/ftdc_pipeline/purple_code/purple-mri_20250919/
 scriptsdir=/project/ftdc_pipeline/ftdc-picsl/pmacsPurps-v0.2.1/bin/
-outdir=${bidsBase}/derivatives/beta_FLASH_T2w/
-
+outdir=${bidsBase}/derivatives/greedy_flash_to_t2/
+logdir=${outdir}logs/
 if [[ $# -lt 1 ]] ; then
     echo "./submit_dots_to_flashreorient.sh <filelist,<<optional:hemi>>.csv> "
     echo "  wrapper for mapping the dots placed on t2w-reslice to the FLASH-reorient"
@@ -16,7 +16,6 @@ fi
 filelist=$1
 n_threads=1
 
-logdir=${outdir}logs/
 if [[ ! -d $logdir ]] ; then 
     mkdir -p $logdir
 fi
@@ -88,7 +87,7 @@ for x in `cat $filelist `; do
         flash_i=$(echo $i | sed "s/acq-300um_rec-reorient_T2w.nii.gz/${flash_pick}/")
         flash=`ls ${bidsBase}/${flash_i} 2> /dev/null`
         if [[ -f $flash ]] ; then
-            echo "${flash} found"
+            echo "${flash_reorient} found"
             break
         fi
     done 
@@ -108,7 +107,7 @@ for x in `cat $filelist `; do
     cmd="${scriptsdir}/reslice_dots_to_flashreorient.sh ${reorient} ${reslice} ${reslice_mat} ${reslice_dots} ${flash} ${outdir}/${flash_dots_i} ${scriptsdir}"
     echo $cmd 
     # $cmd
-    bsub -N -J ${filestem}_reslice_dots_to_flashreorient -o ${logdir}/${filestem}_reslice_dots_to_flashreorient_%J.txt -n 4 -M 64GB $cmd
+    bsub -N -J ${filestem}_reslice_dots_to_flashreorient -o ${logdir}/${filestem}_reslice_dots_to_flashreorient_%J.txt -n 4 -M 32GB $cmd
 
 done
 

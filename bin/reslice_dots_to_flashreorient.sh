@@ -24,12 +24,25 @@ if [[ -f $flash_reorient_dots ]] ; then
 fi
 
 # check for the t2w-reorient flash-reorient warp
-flash_warp_i=$(echo $flash_reorient | sed 's/acq-160um_echo-2_run-3_rec-reorient_FLASH/from-T2w_to-FLASH_warp_smooth/')
+
+for flash_pick in 'acq-160um_echo-2_run-3_rec-reorient_FLASH.nii.gz' 'acq-160um_echo-2_run-2_rec-reorient_FLASH.nii.gz' 'acq-160um_echo-2_rec-reorient_FLASH.nii.gz' \
+        'acq-channelCOMBx160um_dir-positive_run-02_echo-2_part-mag_rec-reorient_FLASH.nii.gz' 'acq-channelCOMBx160um_dir-positive_echo-2_part-mag_rec-reorient_FLASH.nii.gz' ; do 
+        # echo $flash_pick
+        # check for the flash-reorient image
+        flash_reorient_i=$(echo $i | sed "s/acq-300um_rec-reorient_T2w.nii.gz/${flash_pick}/")
+        flash_reorient=`ls ${bidsBase}/${flash_reorient_i} 2> /dev/null`
+        if [[ -f $flash_reorient ]] ; then
+            echo "${flash_reorient} found"
+            break
+        fi
+    done 
+    
+flash_warp_i=$(echo $flash_reorient | sed 's/acq-160um_echo-2_run-3_rec-reorient_FLASH/from-FLASH_to-T2w_warp_smooth/')
 flash_warp=`ls ${flash_warp_i} 2> /dev/null`
 if [[ ! -f $flash_warp ]] ; then
     echo "no file named ${flash_warp_i} ... making it (slow part)"
-    flash_transform_prefix=$(echo $flash_warp_i | sed 's/from-T2w_to-FLASH_warp_smooth.nii.gz/from-T2w_to-FLASH_/')
-    cmd="${scriptsdir}/t2wreorient_to_flashreorient.sh ${t2w_reorient} ${flash_reorient} ${flash_transform_prefix}"
+    flash_transform_prefix=$(echo $flash_warp_i | sed 's/from-FLASH_to-T2w_warp_smooth.nii.gz/from-FLASH_to-T2w_/')
+    cmd="${scriptsdir}/greedy_flash_to_t2w_organizer.sh ${t2w_reorient} ${flash_reorient} ${outdir} ${flash_in_t2w_i} ${scriptsdir}"
     echo $cmd
     $cmd
 else
@@ -37,7 +50,7 @@ else
     echo "" 
 fi 
 
-flash_affine_i=$(echo $flash_warp_i | sed 's/from-T2w_to-FLASH_warp_smooth.nii.gz/from-T2w_to-FLASH_affine.mat/')
+flash_affine_i=$(echo $flash_warp_i | sed 's/from-FLASH_to-T2w_warp_smooth.nii.gz/from-FLASH_to-T2w_affine.mat/')
 flash_affine=`ls ${flash_affine_i} 2> /dev/null`
 
 flash_warp=`ls ${flash_warp_i} 2> /dev/null`
