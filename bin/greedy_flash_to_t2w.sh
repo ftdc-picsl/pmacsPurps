@@ -25,8 +25,8 @@ greedy -d 3 -threads 4 \
     -s 8.0mm 1.0mm -sv -wp 0 \
     -oroot ${flash_to_t2w_transform_prefix}_root_warp.nii.gz 
 
-echo "${flash_to_t2w_transform_prefix}_root_warp.nii.gz ${flash_to_t2w_transform_prefix}_affine.mat" \
+echo "${flash_to_t2w_transform_prefix}_root_warp.nii.gz,64 ${flash_to_t2w_transform_prefix}_affine.mat" \
     > ${flash_to_t2w_transform_prefix}.txt
 
-echo "${flash_to_t2w_transform_prefix}_affine.mat,-1 ${flash_to_t2w_transform_prefix}_root_warp.nii.gz,-1" \
+echo "${flash_to_t2w_transform_prefix}_affine.mat,-1 ${flash_to_t2w_transform_prefix}_root_warp.nii.gz,-64" \
     > ${flash_to_t2w_transform_prefix}_inverted_from-T2w_to-FLASH.txt
