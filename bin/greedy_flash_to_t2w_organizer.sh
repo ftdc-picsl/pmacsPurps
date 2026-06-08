@@ -32,7 +32,7 @@ flash_warp_i="${outdir}/${bids_anat}/${fileroot}_from-FLASH_to-T2w_warp_smooth.n
 flash_warp=`ls ${flash_warp_i} 2> /dev/null`
 if [[ ! -f $flash_warp ]] ; then
     echo "no file named ${flash_warp_i} ... making it (slow part)"
-    flash_transform_prefix=$(echo $flash_warp_i | sed 's/from-FLASH_to-T2w_warp_smooth.nii.gz/from-FLASH_to-T2w_/')
+    flash_transform_prefix=$(echo $flash_warp_i | sed 's/from-FLASH_to-T2w_warp_smooth.nii.gz/from-FLASH_to-T2w/')
     ss_bids_anat=$(dirname $flash_transform_prefix)
     if [[ ! -d $ss_bids_anat ]] ; then 
         mkdir -p $ss_bids_anat
