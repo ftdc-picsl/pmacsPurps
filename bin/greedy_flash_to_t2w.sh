@@ -23,10 +23,10 @@ greedy -d 3 -threads 4 \
     -i ${t2w_reorient} ${flash_reorient} \
     -it ${flash_to_t2w_transform_prefix}_affine.mat -n 50x25x0 -m WNCC 2x2x2 \
     -s 8.0mm 1.0mm -sv -wp 0 \
-    -oroot ${flash_to_t2w_transform_prefix}_root_warp.nii.gz 
+    -oroot ${flash_to_t2w_transform_prefix}_warproot.nii.gz 
 
-echo "${flash_to_t2w_transform_prefix}_root_warp.nii.gz,64 ${flash_to_t2w_transform_prefix}_affine.mat" \
+echo "${flash_to_t2w_transform_prefix}_warproot.nii.gz,64 ${flash_to_t2w_transform_prefix}_affine.mat" \
     > ${flash_to_t2w_transform_prefix}.txt
 
-echo "${flash_to_t2w_transform_prefix}_affine.mat,-1 ${flash_to_t2w_transform_prefix}_root_warp.nii.gz,-64" \
+echo "${flash_to_t2w_transform_prefix}_affine.mat,-1 ${flash_to_t2w_transform_prefix}_warproot.nii.gz,-64" \
     > ${flash_to_t2w_transform_prefix}_inverted_from-T2w_to-FLASH.txt

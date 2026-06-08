@@ -27,12 +27,12 @@ filename=$(basename ${flash_in_t2w_filename})
 bids_anat=$(dirname ${flash_in_t2w_filename})
 fileroot=$(echo $filename | cut -d '_' -f1-2)
 
-flash_warp_i="${outdir}/${bids_anat}/${fileroot}_from-FLASH_to-T2w_root_warp.nii.gz"
+flash_warp_i="${outdir}/${bids_anat}/${fileroot}_from-FLASH_to-T2w_warproot.nii.gz"
 
 flash_warp=`ls ${flash_warp_i} 2> /dev/null`
 if [[ ! -f $flash_warp ]] ; then
     echo "no file named ${flash_warp_i} ... making it (slow part)"
-    flash_transform_prefix=$(echo $flash_warp_i | sed 's/from-FLASH_to-T2w_root_warp.nii.gz/from-FLASH_to-T2w/')
+    flash_transform_prefix=$(echo $flash_warp_i | sed 's/from-FLASH_to-T2w_warproot.nii.gz/from-FLASH_to-T2w/')
     ss_bids_anat=$(dirname $flash_transform_prefix)
     if [[ ! -d $ss_bids_anat ]] ; then 
         mkdir -p $ss_bids_anat
@@ -45,7 +45,7 @@ else
     echo "" 
 fi 
 
-flash_affine_i=$(echo $flash_warp_i | sed 's/from-FLASH_to-T2w_root_warp.nii.gz/from-FLASH_to-T2w_affine.mat/')
+flash_affine_i=$(echo $flash_warp_i | sed 's/from-FLASH_to-T2w_warproot.nii.gz/from-FLASH_to-T2w_affine.mat/')
 flash_affine=`ls ${flash_affine_i} 2> /dev/null`
 
 flash_warp=`ls ${flash_warp_i} 2> /dev/null`
